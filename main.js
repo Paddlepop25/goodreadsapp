@@ -4,6 +4,7 @@ const handlebars = require('express-handlebars')
 const mysql = require('mysql2/promise')
 const fetch = require('node-fetch')
 const withQuery = require('with-query').default
+var morgan = require('morgan')
 
 const PORT = parseInt(process.argv[2]) || parseInt(process.env.PORT) || 3000
 
@@ -32,6 +33,7 @@ const startApp = async (app, pool) => {
 }
 
 const app = express()
+app.use(morgan('combined'))
 
 app.engine('hbs', handlebars({ defaultLayout: 'default.hbs' }))
 app.set('view engine', 'hbs')
@@ -67,16 +69,18 @@ app.get('/results',
 
       const resultofLetters = await conn.query(SQL_FIND_BY_LETTER, [`${letter}%`, limit, offset])
       resultOfLetter = resultofLetters[0]
-      console.info('resultOfLetter --->', resultOfLetter)
+      // console.info('resultOfLetter --->', resultOfLetter)
       const hasContent = resultofLetters[0].length
       // console.info('hasContent --->', hasContent)
-
+      
       res.status(200)
       res.type('text/html')
       res.render('results', {
         letter, resultOfLetter, hasContent,
         prevOffset: Math.max(0, offset - limit),
-        nextOffset: offset + limit
+        nextOffset: offset + limit,
+        firstPage: offset == 0,
+        lastPage: offset > offset
       })
 
     } catch (err) {
@@ -91,11 +95,11 @@ app.get('/results',
 app.get('/details/:id',
 async (req, res) => {
   const bookID = req.params['book_id']
-
+  console.info('bookID --->', bookID)
   // select * from book2018 where book_id='c170602e';
   const result = await conn.query(SQL_FIND_BY_LETTER, [ `${letter}%`, limit, offset ])
   const resultOfLetter = result[0]
-  console.info('resultOfLetter --->', resultOfLetter)
+  // console.info('resultOfLetter --->', resultOfLetter)
 
   let conn;
 
@@ -106,7 +110,7 @@ async (req, res) => {
 
     const detailsOfTitle = await conn.query(SQL_FIND_BY_ALLRESULTS)
     resultOfDetails = detailsOfTitle[0]
-    console.info('resultOfDetails --->', resultOfDetails)
+    // console.info('resultOfDetails --->', resultOfDetails)
 
     res.status(200)
     res.type('text/html')
@@ -122,6 +126,8 @@ async (req, res) => {
   }
 }
 )
+
+
 // app.use(express.static(__dirname + '/static'))
 
 // app.use((req, res) => {

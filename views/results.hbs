@@ -2,19 +2,33 @@
 <h1>Letter {{letter}}</h1>
 
 {{#each resultOfLetter}}
-  <a href="/detail" name="title" value="{{this.book_id}}">{{this.title}}</a>
+<ul>
+  <li>
+    <a href="/detail" type="submit" name="title" value="{{this.book_id}}">{{this.title}}</a>
+  </li>
+</ul>
 {{/each}}
 
-  <form method="GET" action="/results">
-    <input type="hidden" name="letter" value="{{letter}}">
-    <input type="hidden" name="offset" value={{ prevOffset }}>
-    <button type="submit">Previous</button>
-  </form>
+{{#if firstPage}}
   <form method="GET" action="/results">
     <input type="hidden" name="letter" value="{{letter}}">
     <input type="hidden" name="offset" value={{ nextOffset }}>
     <button type="submit">Next</button>
   </form>
+
+{{else}}
+  <form method="GET" action="/results">
+    <input type="hidden" name="letter" value="{{letter}}">
+    <input type="hidden" name="offset" value={{ prevOffset }}>
+    <button type="submit">Previous</button>
+  </form>
+
+  <form method="GET" action="/results">
+    <input type="hidden" name="letter" value="{{letter}}">
+    <input type="hidden" name="offset" value={{ nextOffset }}>
+    <button type="submit">Next</button>
+  </form>
+{{/if}}
 
 {{else}}
 <h3>Your search produce no results</h3>
