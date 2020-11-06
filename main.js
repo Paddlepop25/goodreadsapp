@@ -101,18 +101,21 @@ async (req, res) => {
   
   try {
     conn = await pool.getConnection()
-  //   // select * from book2018 where book_id='c170602e';
+    // select * from book2018 where book_id='c170602e';
     const detailsOfTitle = await conn.query(SQL_FIND_BY_BOOKID, [bookID])
     // console.info('detailsOfTitle --->', detailsOfTitle)
     const bookDetail = detailsOfTitle[0]
-    console.info('bookDetail --->', bookDetail)
-  //   console.info('resultOfDetails --->', resultOfDetails)
-  //   // resultOfDetails = detailsOfTitle[0]
+    // console.info('bookDetail --->', bookDetail)
+    
+    // const author = bookDetail[0]['authors'].split("|").join(", ")
+    // console.info('author --->', author)
+    // const authors = bookDetail[0]['authors'].split("|").join(", ")
+    // console.info('authors --->', authors)
 
     res.status(200)
     res.type('text/html')
     res.render('details', {
-      detailsOfTitle
+      bookDetail
     }) 
     // res.end()
   } 
