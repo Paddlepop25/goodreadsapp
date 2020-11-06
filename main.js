@@ -111,11 +111,13 @@ async (req, res) => {
     // console.info('authors --->', authors)
     const genres = bookDetail[0]['genres'].split("|").join(", ")
     // console.info('genres --->', genres)
+    const title = bookDetail[0]['title']
+    // console.info('title --->', title)
 
     res.status(200)
     res.type('text/html')
     res.render('details', {
-      bookDetail, authors, genres
+      bookDetail, authors, genres, title
     }) 
     // res.end()
   } 
@@ -129,16 +131,39 @@ async (req, res) => {
 }
 )
 
-app.get('/review',
+app.get('/review/:title/:authors',
   (req, res) => {
+    let title = req.params['title']
+    console.info('title --->', title)
+    let authors = req.params['authors']
+    console.info('authors --->', authors)
+    let review_endpoint = "https://api.nytimes.com/svc/books/v3/reviews.json"
 
-    try {
+    const url = withQuery(review_endpoint, {
+      title, authors,
+      "api-key": API_KEY
+    })
+    console.info('url --->', url)
+
+    fetch(url)
+    .then(result => result.json())
+    .then(result => {
+      console.info('result ----> ', result)
+      
+      const num_results = result['num_results']
+      console.info('num_results ----> ', num_results)
+
       res.status(200)
       res.type('text/html')
-      res.render('review')
-    } catch {
-      console.error('err -------> ', err)
-    }
+      res.render('review', {
+        hasContent: num_results > 0
+
+      })
+    })
+  
+    // .catch {
+    //   console.error('err -------> ', err)
+    // }
   }
 )
 
