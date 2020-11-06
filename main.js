@@ -107,15 +107,15 @@ async (req, res) => {
     const bookDetail = detailsOfTitle[0]
     // console.info('bookDetail --->', bookDetail)
     
-    // const author = bookDetail[0]['authors'].split("|").join(", ")
-    // console.info('author --->', author)
-    // const authors = bookDetail[0]['authors'].split("|").join(", ")
+    const authors = bookDetail[0]['authors'].split("|").join(", ")
     // console.info('authors --->', authors)
+    const genres = bookDetail[0]['genres'].split("|").join(", ")
+    // console.info('genres --->', genres)
 
     res.status(200)
     res.type('text/html')
     res.render('details', {
-      bookDetail
+      bookDetail, authors, genres
     }) 
     // res.end()
   } 

@@ -1,22 +1,19 @@
 {{#each bookDetail}}
-<div class="card mb-3" style="max-width: 540px;">
-  <div class="row no-gutters">
+  <div class="row">
     <div class="col-md-4">
       <img src="{{this.image_url}}" class="card-img" alt="...">
-      <p>Pages: {{this.pages}}</p>
-      <p>Rating: {{this.rating}} ({{this.rating_count}})</p>
-      <p>Genres: {{this.genres}}</p>
     </div>
     <div class="col-md-8">
-      <div class="card-body">
-        <h5 class="card-title">{{this.title}}</h5>
-        <p class="card-text">by {{this.authors}}</p>
-        <p class="card-text">{{this.description}}</p>
-        <a href="{{this.image_url}}">Find Review</a>
-      </div>
+        <h5>{{this.title}}</h5>
+        <p>Rating: {{this.rating}} ({{this.rating_count}})</p>
+        <p>Pages: {{this.pages}}</p>
+        <p>{{this.description}}</p>
+        <a href="{{this.image_url}}" target="_blank">Find Review</a>
     </div>
   </div>
-</div>
-
-</div>
 {{/each}}
+
+<h3>Extra Info</h3>
+<p>Author(s): {{authors}}</p>
+<p>Genres: {{genres}}</p>
+
