@@ -1,7 +1,17 @@
 <h1>Reviews</h1>
 
 {{#if hasContent}}
-<h2>Content</h2>
+{{#each review}}
+<p>{{this.book_title}}</p>
+<p>by {{this.book_author}}</p>
+<p>Reviewer: {{this.byline}}</p>
+<p>Review date: {{this.publication_dt}}</p>
+<p>Summary: {{this.summary}}</p>
+
+<a href="{{this.url}}" target="_blank">Full Review</a>
+<br />
+<small>Copyright @ 2020 The New York Times</small>
+{{/each}}
 {{else}}
 <h2>No review</h2>
 {{/if}}

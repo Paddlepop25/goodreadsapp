@@ -152,15 +152,18 @@ app.get('/review/:title/:authors',
       
       const num_results = result['num_results']
       console.info('num_results ----> ', num_results)
-
+      
+      const review = result['results']
+      console.info('review ----> ', review)
+      
       res.status(200)
       res.type('text/html')
       res.render('review', {
+        review,
         hasContent: num_results > 0
 
       })
     })
-  
     // .catch {
     //   console.error('err -------> ', err)
     // }
