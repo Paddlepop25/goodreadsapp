@@ -129,6 +129,20 @@ async (req, res) => {
 }
 )
 
+app.get('/review',
+  (req, res) => {
+
+    try {
+      res.status(200)
+      res.type('text/html')
+      res.render('review')
+    } catch {
+      console.error('err -------> ', err)
+    }
+  }
+)
+
+
 // app.use(express.static(__dirname + '/static'))
 
 // app.use((req, res) => {
