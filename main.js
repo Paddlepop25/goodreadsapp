@@ -72,7 +72,7 @@ app.get('/results',
       // console.info('resultOfLetter --->', resultOfLetter)
       const hasContent = resultofLetters[0].length
       // console.info('hasContent --->', hasContent)
-      
+
       res.status(200)
       res.type('text/html')
       res.render('results', {
@@ -88,47 +88,47 @@ app.get('/results',
     } finally {
       // release connection
       if (conn)
-      conn.release()
+        conn.release()
     }
   })
 
 app.get('/details/:id',
-async (req, res) => {
-  const bookID = req.params['id']
-  // console.info('bookID --->', bookID)
-  
-  let conn;
-  
-  try {
-    conn = await pool.getConnection()
-    // select * from book2018 where book_id='c170602e';
-    const detailsOfTitle = await conn.query(SQL_FIND_BY_BOOKID, [bookID])
-    // console.info('detailsOfTitle --->', detailsOfTitle)
-    const bookDetail = detailsOfTitle[0]
-    // console.info('bookDetail --->', bookDetail)
-    
-    const authors = bookDetail[0]['authors'].split("|").join(", ")
-    // console.info('authors --->', authors)
-    const genres = bookDetail[0]['genres'].split("|").join(", ")
-    // console.info('genres --->', genres)
-    const title = bookDetail[0]['title']
-    // console.info('title --->', title)
+  async (req, res) => {
+    const bookID = req.params['id']
+    // console.info('bookID --->', bookID)
 
-    res.status(200)
-    res.type('text/html')
-    res.render('details', {
-      bookDetail, authors, genres, title
-    }) 
-    // res.end()
-  } 
-  catch (err) {
-    console.error('error ---->', err)
-  } finally {
-    // release connection
-    if (conn)
-    conn.release()
+    let conn;
+
+    try {
+      conn = await pool.getConnection()
+      // select * from book2018 where book_id='c170602e';
+      const detailsOfTitle = await conn.query(SQL_FIND_BY_BOOKID, [bookID])
+      // console.info('detailsOfTitle --->', detailsOfTitle)
+      const bookDetail = detailsOfTitle[0]
+      // console.info('bookDetail --->', bookDetail)
+
+      const authors = bookDetail[0]['authors'].split("|").join(", ")
+      // console.info('authors --->', authors)
+      const genres = bookDetail[0]['genres'].split("|").join(", ")
+      // console.info('genres --->', genres)
+      const title = bookDetail[0]['title']
+      // console.info('title --->', title)
+
+      res.status(200)
+      res.type('text/html')
+      res.render('details', {
+        bookDetail, authors, genres, title
+      })
+      // res.end()
+    }
+    catch (err) {
+      console.error('error ---->', err)
+    } finally {
+      // release connection
+      if (conn)
+        conn.release()
+    }
   }
-}
 )
 
 app.get('/review/:title/:authors',
@@ -146,24 +146,42 @@ app.get('/review/:title/:authors',
     console.info('url --->', url)
 
     fetch(url)
-    .then(result => result.json())
-    .then(result => {
-      console.info('result ----> ', result)
-      
-      const num_results = result['num_results']
-      console.info('num_results ----> ', num_results)
-      
-      const review = result['results']
-      console.info('review ----> ', review)
-      
-      res.status(200)
-      res.type('text/html')
-      res.render('review', {
-        review,
-        hasContent: num_results > 0
+      .then(result => result.json())
+      .then(result => {
+        console.info('result ----> ', result)
 
-      })
-    })
+        const num_results = result['num_results']
+        console.info('num_results ----> ', num_results)
+
+        const review = result['results']
+        console.info('review ----> ', review)
+
+        res.status(200)
+        // res.type('text/html')
+        // res.render('review', {
+        //   review,
+        //   hasContent: num_results > 0
+        // })
+        res.format({
+          'text/html': () => {
+            res.render('review', {
+              review,
+              hasContent: num_results > 0
+            }
+            )
+          },
+          'application/json': () => {
+            res.type('application/json')
+            res.json(review)
+          },
+          'default': () => {
+            res.status(406)
+            res.type('text/plain')
+            res.send(`Not supported: ${req.get("Accept")}`)
+          }
+        })
+      }
+      )
     // .catch {
     //   console.error('err -------> ', err)
     // }
@@ -173,10 +191,10 @@ app.get('/review/:title/:authors',
 
 // app.use(express.static(__dirname + '/static'))
 
-// app.use((req, res) => {
-//   res.status(404)
-//   res.type('text/html')
-//   res.render('error404')
-// })
+app.use((req, res) => {
+  res.status(404)
+  res.type('text/html')
+  res.render('error404')
+})
 
 startApp(app, pool)
