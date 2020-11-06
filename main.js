@@ -41,7 +41,7 @@ app.set('view engine', 'hbs')
 const API_KEY = process.env.API_KEY || ""
 
 // select * from book2018 where book_id='c170602e';
-// const SQL_FIND_BY_ALLRESULTS = 'select * from book2018 where book_id = ? '
+const SQL_FIND_BY_BOOKID = 'select * from book2018 where book_id = ? '
 const SQL_FIND_BY_LETTER = 'select * from book2018 where title like ? order by title asc limit ? offset ?'
 
 // configure app
@@ -94,30 +94,29 @@ app.get('/results',
 
 app.get('/details/:id',
 async (req, res) => {
-  const bookID = req.params['book_id']
-  console.info('bookID --->', bookID)
-  // select * from book2018 where book_id='c170602e';
-  const result = await conn.query(SQL_FIND_BY_LETTER, [ `${letter}%`, limit, offset ])
-  const resultOfLetter = result[0]
-  // console.info('resultOfLetter --->', resultOfLetter)
-
+  const bookID = req.params['id']
+  // console.info('bookID --->', bookID)
+  
   let conn;
-
+  
   try {
     conn = await pool.getConnection()
-
-    const SQL_FIND_BY_ALLRESULTS = 'select * from book2018'
-
-    const detailsOfTitle = await conn.query(SQL_FIND_BY_ALLRESULTS)
-    resultOfDetails = detailsOfTitle[0]
-    // console.info('resultOfDetails --->', resultOfDetails)
+  //   // select * from book2018 where book_id='c170602e';
+    const detailsOfTitle = await conn.query(SQL_FIND_BY_BOOKID, [bookID])
+    // console.info('detailsOfTitle --->', detailsOfTitle)
+    const bookDetail = detailsOfTitle[0]
+    console.info('bookDetail --->', bookDetail)
+  //   console.info('resultOfDetails --->', resultOfDetails)
+  //   // resultOfDetails = detailsOfTitle[0]
 
     res.status(200)
     res.type('text/html')
     res.render('details', {
-      resultOfLetter
+      detailsOfTitle
     }) 
-  } catch (err) {
+    // res.end()
+  } 
+  catch (err) {
     console.error('error ---->', err)
   } finally {
     // release connection
@@ -126,7 +125,6 @@ async (req, res) => {
   }
 }
 )
-
 
 // app.use(express.static(__dirname + '/static'))
 
