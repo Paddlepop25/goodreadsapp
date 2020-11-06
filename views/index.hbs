@@ -1,9 +1,10 @@
 <h1>My Bookstore</h1>
 
 <form method="GET", action="/results">
-  <button class="btn btn-warning" type="submit" name="letter" value="A">A</button>
-  <button class="btn btn-warning" type="submit" name="letter" value="B">B</button>
-  <button class="btn btn-warning" type="submit" name="letter" value="C">C</button>
-
-
+  {{# alphabets}}
+  <button class="btn btn-warning" type="submit" name="letter" value="{{this}}">{{this}}</button>
+  {{/alphabets}}
+  {{# numbers}}
+  <button class="btn btn-warning" type="submit" name="letter" value="{{this}}">{{this}}</button>
+  {{/numbers}}
 </form>

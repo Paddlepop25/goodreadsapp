@@ -26,7 +26,7 @@ const startApp = async (app, pool) => {
     app.listen(PORT, () => {
       console.info(`Application started on port ${PORT} at ${new Date()}`)
     })
-  } catch(exception) {
+  } catch (exception) {
     console.error('Cannot ping database: ', exception)
   }
 }
@@ -38,51 +38,96 @@ app.set('view engine', 'hbs')
 
 const API_KEY = process.env.API_KEY || ""
 
-// select title from book2018 where title LIKE 'A%' order by title asc limit 10;offset 10
-const SQL_FIND_BY_LETTER = 'select title from book2018 where title like ? order by title asc limit ? offset ?'
+// select * from book2018 where book_id='c170602e';
+// const SQL_FIND_BY_ALLRESULTS = 'select * from book2018 where book_id = ? '
+const SQL_FIND_BY_LETTER = 'select * from book2018 where title like ? order by title asc limit ? offset ?'
 
 // configure app
 app.get('/',
   (req, res) => {
+    let alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
+    let numbers = "0123456789".split("")
+
     res.status(200)
     res.type('text/html')
-    res.render('index')
+    res.render('index', { alphabets, numbers })
   })
-  
-  let limit = 10
-  let offset = 0;
-  app.get('/results',
+
+app.get('/results',
   async (req, res) => {
     const letter = req.query['letter']
+    let limit = 10
+    let offset = parseInt(req.query['offset']) || 0
     console.info('letter --->', letter)
 
-    const conn = await pool.getConnection()    
-
-    const result = await conn.query(SQL_FIND_BY_LETTER, [ `${letter}%`, limit, offset ])
-    const resultOfLetter = result[0]
-    console.info('resultOfLetter --->', resultOfLetter)
-
-    res.status(200)
-    res.type('text/html')
-    res.render('results', {letter, resultOfLetter})
-    // res.end()
+    let conn, resultOfLetter;
 
     try {
+      conn = await pool.getConnection()
 
-    } catch(err) {
+      const resultofLetters = await conn.query(SQL_FIND_BY_LETTER, [`${letter}%`, limit, offset])
+      resultOfLetter = resultofLetters[0]
+      console.info('resultOfLetter --->', resultOfLetter)
+      const hasContent = resultofLetters[0].length
+      // console.info('hasContent --->', hasContent)
+
+      res.status(200)
+      res.type('text/html')
+      res.render('results', {
+        letter, resultOfLetter, hasContent,
+        prevOffset: Math.max(0, offset - limit),
+        nextOffset: offset + limit
+      })
+
+    } catch (err) {
       console.error('error ---->', err)
     } finally {
       // release connection
+      if (conn)
       conn.release()
     }
   })
 
-  // app.use(express.static(__dirname + '/static'))
+app.get('/details/:id',
+async (req, res) => {
+  const bookID = req.params['book_id']
 
-  // app.use((req, res) => {
-  //   res.status(404)
-  //   res.type('text/html')
-  //   res.render('error404')
-  // })
+  // select * from book2018 where book_id='c170602e';
+  const result = await conn.query(SQL_FIND_BY_LETTER, [ `${letter}%`, limit, offset ])
+  const resultOfLetter = result[0]
+  console.info('resultOfLetter --->', resultOfLetter)
 
-  startApp(app, pool)
+  let conn;
+
+  try {
+    conn = await pool.getConnection()
+
+    const SQL_FIND_BY_ALLRESULTS = 'select * from book2018'
+
+    const detailsOfTitle = await conn.query(SQL_FIND_BY_ALLRESULTS)
+    resultOfDetails = detailsOfTitle[0]
+    console.info('resultOfDetails --->', resultOfDetails)
+
+    res.status(200)
+    res.type('text/html')
+    res.render('details', {
+      resultOfLetter
+    }) 
+  } catch (err) {
+    console.error('error ---->', err)
+  } finally {
+    // release connection
+    if (conn)
+    conn.release()
+  }
+}
+)
+// app.use(express.static(__dirname + '/static'))
+
+// app.use((req, res) => {
+//   res.status(404)
+//   res.type('text/html')
+//   res.render('error404')
+// })
+
+startApp(app, pool)
