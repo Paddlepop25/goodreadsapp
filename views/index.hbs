@@ -1,10 +1,13 @@
-<h1>My Bookstore</h1>
+<div class="figureBox mt-5">
+  <h1>My Bookstore</h1>
 
-<form method="GET", action="/results">
-  {{# alphabets}}
-  <button class="btn btn-warning" type="submit" name="letter" value="{{this}}">{{this}}</button>
-  {{/alphabets}}
-  {{# numbers}}
-  <button class="btn btn-warning" type="submit" name="letter" value="{{this}}">{{this}}</button>
-  {{/numbers}}
-</form>
+  <form method="GET" , action="/results">
+    {{# alphabets}}
+    <button class="btn btn-warning mt-4" type="submit" name="letter" value="{{this}}">{{this}}</button>
+    {{/alphabets}}
+    <br />
+    {{# numbers}}
+    <button class="btn btn-warning mt-4" type="submit" name="letter" value="{{this}}">{{this}}</button>
+    {{/numbers}}
+  </form>
+</div>

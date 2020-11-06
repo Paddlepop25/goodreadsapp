@@ -1,22 +1,23 @@
-{{#if hasContent}}
-<h1>Letter {{letter}}</h1>
+<div class="figureBox">
+  {{#if hasContent}}
+  <h1 class="mt-4">Letter {{letter}}</h1>
 
-{{#each resultOfLetter}}
-<ul>
-  <li>
-    <a href="/details/{{this.book_id}}">{{this.title}}</a>
-  </li>
-</ul>
-{{/each}}
+  {{#each resultOfLetter}}
+  <ul>
+    <li>
+      <a href="/details/{{this.book_id}}">{{this.title}}</a>
+    </li>
+  </ul>
+  {{/each}}
 
-{{#if firstPage}}
+  {{#if firstPage}}
   <form method="GET" action="/results">
     <input type="hidden" name="letter" value="{{letter}}">
     <input type="hidden" name="offset" value={{ nextOffset }}>
     <button type="submit">Next</button>
   </form>
 
-{{else}}
+  {{else}}
   <form method="GET" action="/results">
     <input type="hidden" name="letter" value="{{letter}}">
     <input type="hidden" name="offset" value={{ prevOffset }}>
@@ -28,10 +29,11 @@
     <input type="hidden" name="offset" value={{ nextOffset }}>
     <button type="submit">Next</button>
   </form>
-{{/if}}
+  {{/if}}
 
-{{else}}
-<h3>Your search produce no results</h3>
-{{/if}}
+  {{else}}
+  <h1 class="mt-3">Your selection produce no results</h1>
+  {{/if}}
 
-<a href="/">Back to home</a>
+  <button class="btn btn-warning mt-4"><a href="/">Back to home</a></button>
+</div>

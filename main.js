@@ -188,8 +188,7 @@ app.get('/review/:title/:authors',
   }
 )
 
-
-// app.use(express.static(__dirname + '/static'))
+app.use(express.static(__dirname + '/static'))
 
 app.use((req, res) => {
   res.status(404)

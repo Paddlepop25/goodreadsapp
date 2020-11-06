@@ -1,3 +1,0 @@
-hide next button for last page
-fix author
-fix author
