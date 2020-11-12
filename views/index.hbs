@@ -1,0 +1,17 @@
+<h1 class="text-center mt-5 mb-5">My Bookstore</h1>
+
+<div class="row">
+  {{#each alphabets}}
+    <form method="GET", action="/letter{{this}}/page1">
+      <button class="btn btn-outline-primary btn-lg mt-4 mr-3 mb-4" type="submit" style="width:50px;">{{this}}</button>
+    </form>
+  {{/each}}
+</div>
+
+<div class="row">
+  {{#each numbers}}
+    <form method="GET", action="/letter{{this}}/page1">
+      <button class="btn btn-outline-success mt-4 btn-lg mr-3 mb-4" type="submit" style="width:50px;">{{this}}</button>
+    </form>
+    {{/each}}
+</div>

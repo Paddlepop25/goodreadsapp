@@ -1,0 +1,20 @@
+<h1 class="text-center mt-5 mb-5">Book details</h1>
+
+<div class="row">
+  <div class="col-4 mb-5">
+    <img src="{{bookDetail.image_url}}" alt="">
+    <br />
+    <br />
+    <span>Pages: {{bookDetail.pages}}</span>
+    <br />
+    <span>Rating: {{bookDetail.rating}} ({{bookDetail.rating_count}})</span>
+    <br />
+    <span>Genres: {{bookDetail.genres}}</span>
+  </div>
+  <div class="col-8 mb-5">
+    <h2>{{bookDetail.title}}</h2>
+    <p>by {{bookDetail.authors}}</p>
+    <p>{{bookDetail.description}}</p>
+    <a href="/reviews/{{bookDetail.title}}/{{bookDetail.authors}}">Find Review</a>
+  </div>
+</div>
