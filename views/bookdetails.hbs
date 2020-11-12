@@ -1,0 +1,22 @@
+<h1 class="text-center mt-5 mb-5">Book details</h1>
+
+<div class="row">
+  <div class="col-4 mb-5">
+    {{#each bookInfo}}
+    <img src="{{this.image_url}}" alt="">
+    <br />
+    <br />
+    <span>Pages: {{this.pages}}</span>
+    <br />
+    <span>Rating: {{this.rating}} ({{this.rating_count}})</span>
+    <br />
+    <span>Genres: {{this.genres}}</span>
+  </div>
+  <div class="col-8 mb-5">
+    <h2>{{this.title}}</h2>
+    <p>by {{this.authors}}</p>
+    <p>{{this.description}}</p>
+    <a href="/bookreviews/{{this.title}}/{{this.authors}}">Find Review</a>
+    {{/each}}
+  </div>
+</div>

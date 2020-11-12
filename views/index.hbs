@@ -1,0 +1,13 @@
+<h1 class="text-center mt-5 mb-5">My Bookstore</h1>
+
+<div class="row">
+  {{#each letters}}
+  <a href="/booktitles/search{{this}}/page1" role="button" class="btn btn-outline-primary btn-lg mr-3 mb-4">{{this}}</a>
+  {{/each}}
+</div>
+
+<div class="row">
+  {{#each numbers}}
+  <a href="/booktitles/search{{this}}/page1" role="button" class="btn btn-outline-success btn-lg mr-3 mb-4">{{this}}</a>
+  {{/each}}
+</div>

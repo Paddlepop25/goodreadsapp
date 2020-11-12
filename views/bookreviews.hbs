@@ -1,0 +1,23 @@
+{{#if hasContent}}
+
+<h1 class="text-center mt-5 mb-5">Book reviews</h1>
+<div class="d-flex justify-content-center">
+  {{#each bookResults}}
+  <div class="card" style="width: 30rem; outline: 1px dashed orange">
+    <div class="card-body">
+      <h2 class="card-title">{{this.book_title}}</h2>
+      <h4 class="card-subtitle mb-2">by {{this.book_author}}</h4>
+      <p>Reviewer: {{this.byline}}</p>
+      <p>Date: {{this.publication_dt}}</p>
+      <p class="card-text">{{this.summary}}</p>
+      <a href="{{this.url}}" class="card-link" target="_blank">Full Review</a>
+      <br />
+      <small>{{../copyright}}</small>
+    </div>
+  </div>
+</div>
+{{/each}}
+
+{{else}}
+<h1 class="text-center mt-5 mb-5">There are no reviews for this book 📕</h1>
+{{/if}}
