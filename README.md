@@ -17,5 +17,6 @@ This is an application made as part of the assessment for the [Server Side Found
 3. [morgan](https://www.npmjs.com/package/morgan), [dotenv](https://www.npmjs.com/package/dotenv), [flat-cache](https://www.npmjs.com/package/flat-cache) amongst other npm libraries
 
 ## Note
-Master branch contains code written during the assessment day. Please see the different branches for improved versions of the application.
+Master branch contains code written during the assessment day.\
+Please see the different [branches](https://github.com/Paddlepop25/goodreadsapp/branches) for improved versions of the application.
 
